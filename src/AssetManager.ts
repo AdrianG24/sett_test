@@ -38,7 +38,7 @@ export class AssetManager {
     this.assetDefinitions = configItems.map((item) => ({
       type: item.id,
       category: item.category,
-      modelPath: "/assets/gltf/objects.glb",
+      modelPath: new URL("../assets/gltf/objects.glb", import.meta.url).href,
       thumbnailPath: item.thumbnail,
       radius: item.radius,
       scale: item.scale || 1.0,
