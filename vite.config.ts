@@ -1,13 +1,19 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  base: '/sett_test/',
   server: {
     host: true,
     port: 3000,
     watch: {
       usePolling: false,
-      ignored: ["**/node_modules/**", "**/dist/**", '**/*.glb', '**/*.gltf','**/src/assetsEnum.ts' ],
-
+      ignored: [
+        "**/node_modules/**",
+        "**/dist/**",
+        '**/*.glb',
+        '**/*.gltf',
+        '**/src/assetsEnum.ts'
+      ],
     },
   },
   build: {
