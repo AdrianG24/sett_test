@@ -104,6 +104,19 @@ export class UIManager {
     }
   }
 
+  public updateGnomeCounter(found: number, total: number): void {
+    const foundElement = document.getElementById("gnomes-found");
+    const totalElement = document.getElementById("total-gnomes");
+    
+    if (foundElement) {
+      foundElement.textContent = found.toString();
+    }
+    
+    if (totalElement) {
+      totalElement.textContent = total.toString();
+    }
+  }
+
   private getItemsForCategory(
     category: string
   ): Array<{ type: string; name: string; thumbnail?: string }> {

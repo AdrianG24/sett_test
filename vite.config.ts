@@ -12,8 +12,17 @@ export default defineConfig({
   },
   build: {
     target: "esnext",
-    minify: false,
-    sourcemap: true,
+    minify: "terser",
+    sourcemap: false,
+    outDir: "dist",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three'],
+          tween: ['@tweenjs/tween.js']
+        }
+      }
+    }
   },
   assetsInclude: ["**/*.glb", "**/*.gltf", "**/*.bin", "**/*.jpg", "**/*.png"]
 });

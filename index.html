@@ -159,6 +159,44 @@
             border-radius: 0 0 6px 6px;
         }
 
+        #gnome-counter {
+            position: absolute;
+            bottom: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(103, 58, 183, 0.9);
+            border-radius: 12px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(103, 58, 183, 0.3);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(103, 58, 183, 0.4);
+        }
+
+        #gnome-counter h3 {
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-size: 16px;
+        }
+
+        #gnome-counter p {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        #gnomes-found {
+            color: #4CAF50;
+            font-size: 16px;
+        }
+
+        #total-gnomes {
+            color: #FFD700;
+            font-size: 16px;
+        }
+
         #instructions {
             position: absolute;
             bottom: 20%;
@@ -276,6 +314,11 @@
             </div>
 
             <div id="item-panel" class="ui-element">
+            </div>
+
+            <div id="gnome-counter" class="ui-element">
+                <h3>🧙‍♂️ Gnome Hunt</h3>
+                <p>Gnomes found: <span id="gnomes-found">0</span> / <span id="total-gnomes">8</span></p>
             </div>
 
             <div id="instructions" class="ui-element">

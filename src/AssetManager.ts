@@ -57,7 +57,6 @@ export class AssetManager {
       try {
         await this.loadModelFile(modelPath);
       } catch (error) {
-        console.error(`❌ Failed to load model file ${modelPath}:`, error);
       }
     }
   }

@@ -46,6 +46,10 @@ export class GardenDesigner {
   private lightpoleBulbMaterial: THREE.MeshStandardMaterial | null = null;
   private lightpoleLight: THREE.PointLight | null = null;
 
+  // Gnome tracking
+  private totalGnomes: number = 8; // 5 static + 3 walking gnomes
+  private foundGnomes: number = 0;
+
   constructor() {
     this.initializeScene();
     this.initializeCamera();
@@ -823,6 +827,9 @@ export class GardenDesigner {
 
         (mesh as any).isSelected = false;
 
+        // Add special property to make gnomes disappear when clicked
+        mesh.userData.isGnome = true;
+        
         mesh.userData.onSelect = () => {
           (mesh as any).isSelected = true;
         };
@@ -903,6 +910,9 @@ export class GardenDesigner {
         item.originalScale.copy(mesh.scale);
 
         (mesh as any).isSelected = false;
+
+        // Add special property to make gnomes disappear when clicked
+        mesh.userData.isGnome = true;
 
         mesh.userData.onSelect = () => {
           (mesh as any).isSelected = true;
@@ -1076,6 +1086,9 @@ export class GardenDesigner {
     };
 
     this.showLoadingStatus();
+
+    // Initialize gnome counter
+    this.updateGnomeCounter();
 
     this.setupDebugButtons();
   }
@@ -1290,6 +1303,12 @@ export class GardenDesigner {
       const clickedItem = meshToItemMap.get(clickedMesh);
 
       if (clickedItem) {
+        // Check if clicked item is a gnome - make it disappear
+        if (clickedMesh.userData.isGnome) {
+          this.makeGnomeDisappear(clickedItem, clickedMesh);
+          return;
+        }
+        
         if (this.selectedItem === clickedItem) {
           this.deselectItem();
         } else {
@@ -1814,6 +1833,51 @@ export class GardenDesigner {
 
       this.selectedItem = null;
       this.isDragging = false;
+    }
+  }
+
+  private makeGnomeDisappear(item: GardenItem, mesh: THREE.Mesh): void {
+    // Play click sound
+    this.audioManager.playClick();
+    
+    // Add a fun disappearing animation
+    const targetScale = new THREE.Vector3(0, 0, 0);
+    
+    // Animate the gnome shrinking and fading away
+    const animate = () => {
+      mesh.scale.lerp(targetScale, 0.1);
+      
+      if (mesh.scale.length() > 0.01) {
+        requestAnimationFrame(animate);
+      } else {
+        // Remove the gnome from the scene
+        this.scene.remove(mesh);
+        
+        // Remove from placed items
+        const index = this.placedItems.indexOf(item);
+        if (index > -1) {
+          this.placedItems.splice(index, 1);
+        }
+        
+        // Update drag and drop manager
+        if (this.dragAndDropManager) {
+          this.dragAndDropManager.updatePlacedItems(this.placedItems);
+        }
+        
+        // Increment found gnomes counter
+        this.foundGnomes++;
+        this.updateGnomeCounter();
+        
+        console.log(`🧙‍♂️ Gnome disappeared! Found: ${this.foundGnomes}/${this.totalGnomes}`);
+      }
+    };
+    
+    animate();
+  }
+
+  private updateGnomeCounter(): void {
+    if (this.uiManager) {
+      this.uiManager.updateGnomeCounter(this.foundGnomes, this.totalGnomes);
     }
   }
 
