@@ -57,6 +57,7 @@ export class AssetManager {
       try {
         await this.loadModelFile(modelPath);
       } catch (error) {
+        console.error(`❌ Failed to load model file ${modelPath}:`, error);
       }
     }
   }
@@ -64,17 +65,15 @@ export class AssetManager {
   private async loadModelFile(path: string): Promise<void> {
     return new Promise((resolve, reject) => {
       this.loader.load(
-          path,
-          (gltf) => {
-            this.loadedModels.set(path, gltf.scene);
-            resolve();
-          },
-          undefined,
-          reject
+        path,
+        (gltf) => {
+          this.loadedModels.set(path, gltf.scene);
+          resolve();
+        },
+        reject
       );
     });
   }
-
 
   private countMeshesInScene(scene: THREE.Group): number {
     let count = 0;
@@ -111,7 +110,7 @@ export class AssetManager {
       if (loadedModel) {
 
         const clonedModel = loadedModel.clone();
-        let foundMesh: any = null;
+        let foundMesh: THREE.Mesh | null = null;
         let meshCount = 0;
 
         if (definition.gltfName) {
@@ -139,7 +138,7 @@ export class AssetManager {
 
 
         if (!foundMesh) {
-          let deepestMesh: any = null;
+          let deepestMesh: THREE.Mesh | null = null;
           let maxDepth = 0;
 
           let currentDepth = 0;
