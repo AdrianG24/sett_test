@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: './',
   server: {
     host: true,
     port: 3000,
@@ -10,9 +9,9 @@ export default defineConfig({
       ignored: [
         "**/node_modules/**",
         "**/dist/**",
-        '**/*.glb',
-        '**/*.gltf',
-        '**/src/assetsEnum.ts'
+        "**/*.glb",
+        "**/*.gltf",
+        "**/src/assetsEnum.ts",
       ],
     },
   },
@@ -24,11 +23,18 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          three: ['three'],
-          tween: ['@tweenjs/tween.js']
-        }
-      }
-    }
+          three: ["three"],
+          tween: ["@tweenjs/tween.js"],
+        },
+        assetFileNames: (assetInfo) => {
+          // Копіюємо всі assets в папку assets
+          return "assets/[name].[ext]";
+        },
+        chunkFileNames: "assets/[name].js",
+        entryFileNames: "assets/[name].js",
+      },
+    },
+    assetsInlineLimit: 0, // Don't inline any assets
   },
-  assetsInclude: ["**/*.glb", "**/*.gltf", "**/*.bin", "**/*.jpg", "**/*.png"]
+  assetsInclude: ["**/*.glb", "**/*.gltf", "**/*.bin", "**/*.jpg", "**/*.png"],
 });
